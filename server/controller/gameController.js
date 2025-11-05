@@ -32,8 +32,7 @@ export const gameByPlatform = async (req, res) => {
 // GET new games
 export const newGames = async (req, res) => {
   try {
-    const games = await Game.find({});
-    const newGames = games.slice(-8);
+    const newGames = await Game.find({ isNewGame: true });
 
     res.json(newGames);
   } catch (error) {
