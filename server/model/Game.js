@@ -36,6 +36,14 @@ const gameSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    isFeatured: {
+      type: Boolean,
+      required: true,
+    },
+    isNewGame: {
+      type: Boolean,
+      required: true,
+    },
   },
   { timestamps: true }
 );
