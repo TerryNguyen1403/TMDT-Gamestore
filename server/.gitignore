@@ -1,3 +1,5 @@
 node_modules/
 genGame.js
 genGenre.js
+
+.env
