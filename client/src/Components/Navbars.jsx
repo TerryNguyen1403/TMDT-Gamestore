@@ -19,13 +19,17 @@ import logo from "../assets/logo.png";
 
 const Navbars = () => {
   // Tạo menu
-  const menuItems = [
+  const menuItems1 = [
     { href: "/new-products", label: "Game mới" },
     { href: "/featured-products", label: "Game nổi bật" },
+  ];
+
+  const menuItems2 = [
     { href: "/windows", label: "Game Windows" },
     { href: "/playstation", label: "Game Playstation" },
     { href: "/nintendo", label: "Game Nintendo" },
   ];
+
   const navigate = useNavigate();
   const [userEmail, setUserEmail] = useState(null);
   const [dropdownMenu, setDropdownMenu] = useState(false);
@@ -68,9 +72,19 @@ const Navbars = () => {
           </span>
         </Navbar.Brand>
 
-        <NavDropdown title="Danh sách game">
-          {menuItems.map((item) => (
-            <NavDropdown.Item href={item.href}>{item.label}</NavDropdown.Item>
+        <NavDropdown title="Danh sách sản phẩm">
+          {menuItems1.map((item, idx) => (
+            <NavDropdown.Item key={idx} href={item.href}>
+              {item.label}
+            </NavDropdown.Item>
+          ))}
+
+          <NavDropdown.Divider />
+
+          {menuItems2.map((item, index) => (
+            <NavDropdown.Item key={index} href={item.href}>
+              {item.label}
+            </NavDropdown.Item>
           ))}
         </NavDropdown>
 
