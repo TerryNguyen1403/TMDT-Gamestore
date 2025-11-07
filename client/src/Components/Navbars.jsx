@@ -20,8 +20,8 @@ import logo from "../assets/logo.png";
 const Navbars = () => {
   // Tạo menu
   const menuItems1 = [
-    { href: "/new-products", label: "Game mới" },
-    { href: "/featured-products", label: "Game nổi bật" },
+    { href: "/new", label: "Game mới" },
+    { href: "/hot", label: "Game hot" },
   ];
 
   const menuItems2 = [

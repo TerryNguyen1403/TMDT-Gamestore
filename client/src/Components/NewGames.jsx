@@ -5,9 +5,8 @@ const NewGames = () => {
     <ProductSection
       title="mới"
       apiEndpoint="http://localhost:3000/api/game/new"
-      navigateTo="/new-products"
+      navigateTo="/new"
       maxItems={4}
-      dataKey="newProducts"
     />
   );
 };
