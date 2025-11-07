@@ -17,10 +17,6 @@ const BreadCrumb = ({ game }) => {
           Trang chủ
         </Breadcrumb.Item>
 
-        <Breadcrumb.Item linkAs="span">
-          Game
-        </Breadcrumb.Item>
-
         <Breadcrumb.Item active>{game.gameName}</Breadcrumb.Item>
       </Breadcrumb>
     </div>
