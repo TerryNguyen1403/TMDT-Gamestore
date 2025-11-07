@@ -7,7 +7,10 @@ import {
   Card,
   Spinner,
 } from "react-bootstrap";
+
+// Import utils
 import { formatPrice } from "../utils/formatPrice";
+import { calDiscount } from "../utils/calDiscount";
 // import { useNavigate } from "react-router-dom";
 
 // Import context
@@ -46,14 +49,24 @@ const Detail = ({ game }) => {
 
         {/* Thông tin sản phẩm */}
         <Col md={6}>
-          <h2 className="mb-3">{game.gameName}</h2>
+          <h2 className="mb-3" style={{ color: "#ff6b35" }}>
+            {game.gameName}
+          </h2>
 
           {/* Giá */}
-          <div className="mb-3">
-            <span className="fw-bold fs-4 text-danger">
-              {formatPrice(game.price)} ₫
-            </span>
-          </div>
+          {game.discount !== 0 ? (
+            <div className="mb-3">
+              <span className="fw-bold fs-4" style={{ color: "#28a745" }}>
+                {formatPrice(calDiscount(game.price, game.discount))} ₫
+              </span>
+            </div>
+          ) : (
+            <div className="mb-3">
+              <span className="fw-bold fs-4" style={{ color: "#28a745" }}>
+                {formatPrice(game.price)} ₫
+              </span>
+            </div>
+          )}
 
           {/* Mô tả trong box */}
           <Card className="bg-light border-0 shadow-sm mb-4">
@@ -64,7 +77,6 @@ const Detail = ({ game }) => {
 
           {/* Nút thêm vào giỏ hàng */}
           <Button
-            variant="primary"
             size="lg"
             className="mb-3"
             // onClick={() => handleSubmit(game._id)}
@@ -77,7 +89,11 @@ const Detail = ({ game }) => {
             <strong className="text-muted">Nền tảng: </strong>
             {game.platform && game.platform.length > 0 ? (
               game.platform.map((p, index) => (
-                <span key={p._id || index} className="badge bg-primary me-2">
+                <span
+                  key={p._id || index}
+                  className="badge"
+                  style={{ color: "#ff6b35" }}
+                >
                   {p.platformName}
                 </span>
               ))
