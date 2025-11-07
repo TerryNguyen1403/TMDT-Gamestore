@@ -10,7 +10,6 @@ const ProductSection = ({
   apiEndpoint,
   navigateTo,
   maxItems = 4,
-  dataKey = "",
   containerProps = {},
   showViewAll = true,
 }) => {
@@ -26,7 +25,6 @@ const ProductSection = ({
       try {
         const endpoint = apiEndpoint.replace("http://localhost:4000", "");
         const res = await axios.get(endpoint);
-        // Linh hoạt với cấu trúc response khác nhau
         const data = res.data;
         setGames(data);
       } catch (error) {
@@ -38,7 +36,7 @@ const ProductSection = ({
     };
 
     fetchGames();
-  }, [apiEndpoint, dataKey]);
+  }, [apiEndpoint]);
 
   const handleNavigate = () => {
     if (navigateTo) {
