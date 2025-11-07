@@ -1,7 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Card from "react-bootstrap/Card";
+
+// Import utils
 import { formatPrice } from "../../utils/formatPrice";
+import { calDiscount } from "../../utils/calDiscount";
+
+// Import css
 import "./Item.css";
 
 const cardTitleStyle = {
@@ -24,11 +29,22 @@ const Item = ({ game }) => {
         <Card.Img variant="top" src={game.image} alt={game.gameName} />
         <Card.Body>
           <Card.Title style={cardTitleStyle}>{game.gameName}</Card.Title>
-          <div className="d-flex gap-2 mb-3">
-            <Card.Text className="fw-bold price-current">
-              {formatPrice(game.price)} ₫
-            </Card.Text>
-          </div>
+          {game.discount !== 0 ? (
+            <div className="d-flex gap-2">
+              <Card.Text className="fw-bold price-current">
+                {formatPrice(calDiscount(game.price, game.discount))} ₫
+              </Card.Text>
+              <Card.Text className="text-muted text-decoration-line-through">
+                {formatPrice(game.price)} ₫
+              </Card.Text>
+            </div>
+          ) : (
+            <div className="d-flex gap-2 mb-3">
+              <Card.Text className="fw-bold price-current">
+                {formatPrice(game.price)} ₫
+              </Card.Text>
+            </div>
+          )}
         </Card.Body>
       </Link>
     </Card>
