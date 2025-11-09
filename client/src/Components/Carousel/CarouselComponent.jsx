@@ -15,7 +15,7 @@ const CarouselComponent = () => {
   useEffect(() => {
     const fetchFeaturedProducts = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/game/all");
+        const res = await axios.get("http://localhost:3000/api/game/hot");
         setFeaturedProducts(res.data);
       } catch (error) {
         console.error("Lỗi khi fetch sản phẩm: ", error);

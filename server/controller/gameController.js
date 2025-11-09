@@ -39,3 +39,13 @@ export const newGames = async (req, res) => {
     res.status(400).json(error.message);
   }
 };
+
+// GET hot games
+export const hotGames = async (req, res) => {
+  try {
+    const hotGames = await Game.find({ isFeatured: true });
+    res.json(hotGames);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
