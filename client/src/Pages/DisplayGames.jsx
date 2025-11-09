@@ -12,6 +12,7 @@ const DisplayGames = ({ endpoint }) => {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // fetch function
   const fetchGames = async (endpoint) => {
     setLoading(true);
 
@@ -30,12 +31,24 @@ const DisplayGames = ({ endpoint }) => {
 
   useEffect(() => {
     switch (endpoint) {
+      // fetch new games
       case "new":
         fetchGames("new");
         break;
 
+      //fetch hot games
       case "hot":
         fetchGames("hot");
+        break;
+
+      //fetch Windows games
+      case "Windows":
+        fetchGames("Windows");
+        break;
+
+      //fetch Windows games
+      case "Playstation":
+        fetchGames("Playstation");
         break;
 
       default:

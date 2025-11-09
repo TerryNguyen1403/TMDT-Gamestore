@@ -9,6 +9,8 @@ import Login from "./Pages/Login";
 import Home from "./Pages/Home";
 import Register from "./Pages/Register";
 import ProductDetail from "./Pages/ProductDetail";
+import DisplayGames from "./Pages/DisplayGames";
+import ScrollToTop from "./Components/ScrollToTop";
 
 function App() {
   return (
@@ -18,8 +20,16 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/new" element={<DisplayGames endpoint="new" />} />
+        <Route path="/hot" element={<DisplayGames endpoint="hot" />} />
+        <Route path="/Windows" element={<DisplayGames endpoint="Windows" />} />
+        <Route
+          path="/Playstation"
+          element={<DisplayGames endpoint="Playstation" />}
+        />
         <Route path="/product/:id" element={<ProductDetail />} />
       </Routes>
+      <ScrollToTop />
       <Footer />
     </BrowserRouter>
   );
