@@ -9,7 +9,6 @@ const ProductSection = ({
   title,
   apiEndpoint,
   navigateTo,
-  maxItems = 4,
   containerProps = {},
   showViewAll = true,
 }) => {
@@ -23,8 +22,7 @@ const ProductSection = ({
 
       setLoading(true);
       try {
-        const endpoint = apiEndpoint.replace("http://localhost:4000", "");
-        const res = await axios.get(endpoint);
+        const res = await axios.get(apiEndpoint);
         const data = res.data;
         setGames(data);
       } catch (error) {
@@ -115,7 +113,7 @@ const ProductSection = ({
 
       {/* Grid sản phẩm */}
       <Row className="g-4 justify-content-center">
-        {games.slice(-maxItems).map((game, index) => (
+        {games.slice(-4).map((game, index) => (
           <Col
             key={game.id || index}
             xs={6} // 2 cột trên mobile
