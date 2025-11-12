@@ -31,7 +31,20 @@ const ProductDetail = () => {
 
   return (
     <>
-      {console.log(games)}
+      {loading && (
+        <p
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "15vh",
+            fontSize: "1.5rem",
+            fontWeight: "500",
+          }}
+        >
+          Đang tải....
+        </p>
+      )}
       <BreadCrumb game={game} platformParam={platform} />
       <Detail game={game} />
     </>
