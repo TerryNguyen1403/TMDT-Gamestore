@@ -18,9 +18,11 @@ connectDB();
 
 // Import routes
 import gameRoute from "./routes/gameRoute.js";
+import userRoute from "./routes/userRoute.js";
 
 // Routes
 app.use("/api/game", gameRoute);
+app.use("/api/user", userRoute);
 
 // Start server
 const port = process.env.PORT || 3000;
