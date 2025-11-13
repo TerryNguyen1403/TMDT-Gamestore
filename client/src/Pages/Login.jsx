@@ -43,14 +43,15 @@ const Login = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("/api/user/login", {
-        userEmail: userEmail,
-        userPassword: userPassword,
+      const res = await axios.post("http://localhost:3000/api/user/login", {
+        email: userEmail,
+        password: userPassword,
       });
 
       // Lưu token vào localStorage
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("userEmail", userEmail);
+      localStorage.setItem("userName", res.data.userName);
 
       // Hiển thị toast
       showToastMessage("Đăng nhập thành công!", "success");

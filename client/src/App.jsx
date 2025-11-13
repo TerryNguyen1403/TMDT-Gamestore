@@ -11,6 +11,7 @@ import Register from "./Pages/Register";
 import ProductDetail from "./Pages/ProductDetail";
 import DisplayGames from "./Pages/DisplayGames";
 import ScrollToTop from "./Components/ScrollToTop";
+import Admin from "./Pages/Admin";
 
 function App() {
   return (
@@ -28,6 +29,10 @@ function App() {
           element={<DisplayGames endpoint="Playstation" />}
         />
         <Route path="/product/:id" element={<ProductDetail />} />
+
+        {/* Admin routes */}
+
+        <Route path="/admin" element={<Admin />} />
       </Routes>
       <ScrollToTop />
       <Footer />

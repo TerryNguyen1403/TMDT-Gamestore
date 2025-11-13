@@ -17,6 +17,7 @@ const Register = () => {
   const navigator = useNavigate();
 
   // State
+  const [userName, setUserName] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -49,9 +50,10 @@ const Register = () => {
     }
 
     try {
-      const res = await axios.post("/api/user/register", {
-        userEmail,
-        userPassword,
+      const res = await axios.post("http://localhost:3000/api/user/register", {
+        userName: userName,
+        email: userEmail,
+        password: userPassword,
       });
 
       setMessage(res.data.message); // Đăng ký thành công
@@ -59,9 +61,19 @@ const Register = () => {
       // Hiển thị toast
       showToastMessage("Đăng ký thành công!", "success");
 
-      // Chuyển hướng về trang đăng nhập
+      if (toastMessage === "Đăng ký thành công!") {
+        await axios.post("http://localhost:3000/api/user/login", {
+          email: userEmail,
+          password: userPassword,
+        });
+      }
+
+      // Lưu thông tin vào localStorage
+      localStorage.setItem("token", res.data.token);
+
+      // Đăng nhập và chuyển hướng về trang chủ
       setTimeout(() => {
-        navigator("/login");
+        navigator("/");
       }, 1500);
     } catch (error) {
       let errorMessage = "Đăng ký thất bại!";
@@ -86,6 +98,21 @@ const Register = () => {
         <Card style={{ width: "400px" }} className="p-4 shadow">
           <h3 className="text-center mb-4">Đăng ký</h3>
           <Form onSubmit={handleSubmit}>
+            {/* User name */}
+            <Form.Group className="mb-3" controlId="userName">
+              <Form.Label>Tên người dùng</Form.Label>
+              <Form.Control
+                required
+                type="userName"
+                placeholder="Nhập tên người dùng"
+                value={userName}
+                onChange={(e) => setUserName(e.target.value)}
+              />
+              <Form.Control.Feedback type="invalid">
+                Vui lòng nhập tên người dùng
+              </Form.Control.Feedback>
+            </Form.Group>
+
             {/* Email */}
             <Form.Group className="mb-3" controlId="email">
               <Form.Label>Email</Form.Label>

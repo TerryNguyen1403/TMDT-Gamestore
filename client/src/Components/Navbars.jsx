@@ -31,19 +31,19 @@ const Navbars = () => {
   ];
 
   const navigate = useNavigate();
-  const [userEmail, setUserEmail] = useState(null);
+  const [userName, setUserName] = useState(null);
   const [dropdownMenu, setDropdownMenu] = useState(false);
 
   // Hàm hiển thị số lượng
   //   const { getTotalItems } = useContext(CartContext);
 
   useEffect(() => {
-    // Lấy userEmail từ localStorage khi load page
-    setUserEmail(localStorage.getItem("userEmail"));
+    // Lấy userName từ localStorage khi load page
+    setUserName(localStorage.getItem("userName"));
 
     // Lắng nghe sự kiện custom
     const syncLogin = () => {
-      setUserEmail(localStorage.getItem("userEmail"));
+      setUserName(localStorage.getItem("userName"));
     };
 
     window.addEventListener("storageUpdated", syncLogin);
@@ -55,8 +55,9 @@ const Navbars = () => {
 
   const handleLogout = () => {
     localStorage.removeItem("userEmail");
+    localStorage.removeItem("userName");
     localStorage.removeItem("token");
-    setUserEmail(null);
+    setUserName(null);
     alert("Đăng xuất thành công");
     navigate("/");
   };
@@ -121,14 +122,16 @@ const Navbars = () => {
             </Badge>
           </Nav.Link>
 
-          {userEmail ? (
+          {userName ? (
             <div className="position-relative">
               <div
                 className="d-flex align-items-center cursor-pointer user-menu-trigger"
                 onMouseEnter={() => setDropdownMenu(true)}
                 onMouseLeave={() => setDropdownMenu(false)}
               >
-                <span className="me-1">{userEmail}</span>
+                <span className="me-1">
+                  Xin chào, <strong>{userName}</strong>
+                </span>
 
                 {/* Dropdown Menu */}
                 <div
