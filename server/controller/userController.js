@@ -30,7 +30,7 @@ export const register = async (req, res) => {
       newUser,
     });
   } catch (error) {
-    console.error("Lỗi: ", error.message);
+    console.error("Lỗi khi đăng ký: ", error.message);
   }
 };
 
@@ -54,8 +54,9 @@ export const login = async (req, res) => {
     res.json({
       token,
       isAdmin: user.isAdmin,
+      userName: user.userName,
     });
   } catch (error) {
-    console.error(`Lỗi: ${error.message}`);
+    console.error(`Lỗi khi đăng nhập: ${error.message}`);
   }
 };
