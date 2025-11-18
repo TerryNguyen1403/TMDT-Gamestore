@@ -104,6 +104,7 @@ const Navbars = () => {
     };
   }, []);
 
+  // Xử lý sự kiện logout
   const handleLogout = () => {
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userName");
@@ -118,6 +119,18 @@ const Navbars = () => {
     }
     alert("Đăng xuất thành công");
     navigate("/");
+  };
+
+  // Xử lý sự kiện onClickCart
+  const handleCartClick = () => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      navigate("/cart");
+    } else {
+      alert("Vui lòng đăng nhập trước khi sử dụng chức năng giỏ hàng");
+      navigate("/login");
+    }
   };
 
   return (
@@ -162,8 +175,8 @@ const Navbars = () => {
         {/* Giỏ hàng + Đăng nhập/Đăng ký */}
         <Nav className="ms-auto d-flex align-items-center">
           <Nav.Link
-            href="/cart"
             className="d-flex align-items-center me-3 position-relative"
+            onClick={handleCartClick}
           >
             <CartFill size={20} className="me-1" />
             <Badge
