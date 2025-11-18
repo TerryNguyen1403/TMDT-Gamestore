@@ -48,13 +48,14 @@ export const login = async (req, res) => {
     if (!isMatch) return res.json({ message: "Mật khẩu không chính xác" });
 
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1h",
+      expiresIn: "7d",
     });
 
     res.json({
       token,
       isAdmin: user.isAdmin,
       userName: user.userName,
+      userId: user._id,
     });
   } catch (error) {
     console.error(`Lỗi khi đăng nhập: ${error.message}`);

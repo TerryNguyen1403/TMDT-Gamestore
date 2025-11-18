@@ -41,23 +41,81 @@ const Navbars = () => {
     // Lấy userName từ localStorage khi load page
     setUserName(localStorage.getItem("userName"));
 
-    // Lắng nghe sự kiện custom
+    // Lắng nghe sự kiện đăng nhập
     const syncLogin = () => {
       setUserName(localStorage.getItem("userName"));
     };
 
     window.addEventListener("storageUpdated", syncLogin);
+    // Lắng nghe thay đổi localStorage giữa các tab
+    const onNativeStorage = (e) => {
+      if (e.key === "userName" || e.key === "token") {
+        setUserName(localStorage.getItem("userName"));
+      }
+    };
+    window.addEventListener("storage", onNativeStorage);
+
+    // Lắng nghe sự kiện token hết hạn và tự động đăng xuất
+    const onAutoLogout = () => {
+      setUserName(null);
+    };
+    window.addEventListener("logout", onAutoLogout);
+
+    // Kiểm tra token hết hạn định kỳ (trường hợp không có request để trả 401)
+    const checkTokenExpiry = () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+      try {
+        const parts = token.split(".");
+        if (parts.length !== 3) return; // Không phải JWT
+        const payload = JSON.parse(atob(parts[1]));
+        if (!payload?.exp) return;
+        const isExpired = Date.now() >= payload.exp * 1000;
+        if (isExpired) {
+          // Dọn dẹp và thông báo UI
+          localStorage.removeItem("userEmail");
+          localStorage.removeItem("userName");
+          localStorage.removeItem("userId");
+          localStorage.removeItem("token");
+          setUserName(null);
+          try {
+            window.dispatchEvent(new Event("logout"));
+            window.dispatchEvent(new Event("storageUpdated"));
+          } catch (err) {
+            console.error(err?.message);
+          }
+          // Điều hướng về trang đăng nhập trong cùng tab
+          alert("Token đã quá hạn, vui lòng đăng nhập lại");
+          navigate("/login");
+        }
+      } catch (err) {
+        // Nếu không decode được thì bỏ qua
+      }
+    };
+    // Kiểm tra ngay khi mount và theo chu kỳ
+    checkTokenExpiry();
+    const expiryTimer = setInterval(checkTokenExpiry, 15000);
 
     return () => {
       window.removeEventListener("storageUpdated", syncLogin);
+      window.removeEventListener("storage", onNativeStorage);
+      window.removeEventListener("logout", onAutoLogout);
+      clearInterval(expiryTimer);
     };
   }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("userEmail");
     localStorage.removeItem("userName");
+    localStorage.removeItem("userId");
     localStorage.removeItem("token");
     setUserName(null);
+    try {
+      window.dispatchEvent(new Event("logout"));
+      window.dispatchEvent(new Event("storageUpdated"));
+    } catch (error) {
+      console.error(error.message);
+    }
     alert("Đăng xuất thành công");
     navigate("/");
   };
