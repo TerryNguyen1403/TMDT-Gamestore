@@ -90,6 +90,7 @@ const Navbars = () => {
         }
       } catch (err) {
         // Nếu không decode được thì bỏ qua
+        console.error(err);
       }
     };
     // Kiểm tra ngay khi mount và theo chu kỳ
