@@ -35,44 +35,48 @@ export const addToCart = async (req, res) => {
     // Lấy userId từ JWT middleware
     const userId = req.user.userId;
 
-    // Nhận gameId và quantity từ body
-    const { gameId, quantity = 1 } = req.body || {};
-
-    // Kiểm tra quantity hợp lệ
-    const qty = Number(quantity);
-    if (!Number.isFinite(qty) || qty <= 0) {
-      return res.status(400).json({ message: "quantity không hợp lệ" });
-    }
+    // Nhận gameId từ body
+    const { gameId } = req.body || {};
 
     // Đảm bảo giỏ hàng tồn tại
     let cart = await Cart.findOne({ userId });
-    if (!cart) {
-      cart = await Cart.create({ userId, items: [] });
+
+    if (cart) {
+      // Tìm xem sản phẩm đã có trong giỏ chưa
+      const isExistItem = cart.items.find(
+        (item) => String(item.gameId) === String(gameId)
+      );
+      if (isExistItem) {
+        // Nếu tồn tại thì cập nhật số lượng
+        await Cart.findOneAndUpdate(
+          {
+            userId,
+            "items.gameId": gameId,
+          },
+          {
+            $inc: { "items.$.quantity": 1 },
+          }
+        );
+      } else {
+        // Nếu chưa có thì thêm mới
+        cart.items.push({
+          gameId: gameId,
+          quantity: 1,
+        });
+
+        await cart.save();
+      }
+    } else {
+      await Cart.create({
+        userId: userId,
+        items: {
+          gameId: gameId,
+          quantity: 1,
+        },
+      });
     }
 
-    // Cộng dồn nếu item đã tồn tại
-    const updatedExisting = await Cart.findOneAndUpdate(
-      { userId, "items.gameId": gameId },
-      { $inc: { "items.$.quantity": qty } }
-      // { new: true }
-    );
-
-    if (updatedExisting) {
-      return res
-        .status(200)
-        .json({ message: "Đã cập nhật số lượng", cart: updatedExisting });
-    }
-
-    // Nếu chưa có thì push item mới
-    const updatedNew = await Cart.findOneAndUpdate(
-      { userId },
-      { $push: { items: { gameId, quantity: qty } } },
-      { new: true }
-    );
-
-    return res
-      .status(201)
-      .json({ message: "Đã thêm sản phẩm vào giỏ", cart: updatedNew });
+    return res.status(201).json({ message: "Đã thêm sản phẩm vào giỏ" });
   } catch (error) {
     return res.status(500).json({ message: "Xử lý giỏ hàng thất bại" });
   }
