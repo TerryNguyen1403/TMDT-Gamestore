@@ -1,36 +1,29 @@
 import mongoose, { Schema } from "mongoose";
 
-const cartSchema = new mongoose.Schema({
-  userId: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  items: [
-    {
-      _id: false,
-      gameId: {
-        type: Schema.Types.ObjectId,
-        ref: "Game",
-        required: true,
-      },
-      quantity: {
-        type: Number,
-        required: true,
-        default: 0,
-      },
+const cartSchema = new mongoose.Schema(
+  {
+    userId: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-  ],
-  totalPrice: {
-    type: Number,
-    default: 0,
+    items: [
+      {
+        _id: false,
+        gameId: {
+          type: Schema.Types.ObjectId,
+          ref: "Game",
+          required: true,
+        },
+        quantity: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
   },
-  voucher: {
-    type: Schema.Types.ObjectId,
-    ref: "Voucher",
-    default: null,
-  },
-});
+  { timestamps: true }
+);
 
 const Cart = new mongoose.model("Cart", cartSchema);
 
