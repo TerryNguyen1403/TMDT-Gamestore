@@ -49,3 +49,16 @@ export const hotGames = async (req, res) => {
     res.status(400).json(error.message);
   }
 };
+
+// Get game by ID
+export const gameById = async (req, res) => {
+  try {
+    const { gameId } = req.params;
+
+    const found = await Game.findById(gameId);
+
+    res.json(found, gameId);
+  } catch (error) {
+    res.status(400).json(error.message);
+  }
+};
