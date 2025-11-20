@@ -11,18 +11,27 @@ import {
 // Import utils
 import { formatPrice } from "../utils/formatPrice";
 import { calDiscount } from "../utils/calDiscount";
-// import { useNavigate } from "react-router-dom";
 
-// Import context
-// import { CartContext } from "../Context/CartContext";
-// import { useContext } from "react";
+// import { useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
+import { CartContext } from "../Context/CartContext";
+
+// Import componnts
+import Notification from "./Notification";
 
 const Detail = ({ game }) => {
-  // const navigate = useNavigate();
-  // const { addToCart } = useContext(CartContext);
-  // const handleSubmit = (productId) => {
-  //   addToCart(productId);
-  // };
+  // Import và sử dụng context
+  const { contextValues } = useContext(CartContext);
+  const { addToCart } = contextValues || {};
+
+  // Khai báo state
+  const [showNotification, setShowNotification] = useState(false);
+
+  const handleAddToCart = () => {
+    addToCart(game._id);
+    setShowNotification(true),
+      setTimeout(() => setShowNotification(false), 1500);
+  };
 
   if (!game) {
     return (
@@ -36,6 +45,11 @@ const Detail = ({ game }) => {
 
   return (
     <Container className="my-5">
+      {/* Hiển thị thông báo */}
+      {showNotification && (
+        <Notification bgType="success" msg="Thêm vào giỏ hàng thành công" />
+      )}
+
       <Row className="align-items-start">
         {/* Hình ảnh sản phẩm */}
         <Col md={6} className="text-center mb-4 mb-md-0">
@@ -76,11 +90,7 @@ const Detail = ({ game }) => {
           </Card>
 
           {/* Nút thêm vào giỏ hàng */}
-          <Button
-            size="lg"
-            className="mb-3"
-            // onClick={() => handleSubmit(game._id)}
-          >
+          <Button size="lg" className="mb-3" onClick={handleAddToCart}>
             Thêm vào giỏ hàng
           </Button>
 
