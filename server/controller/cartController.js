@@ -83,7 +83,7 @@ export const addToCart = async (req, res) => {
   }
 };
 
-// Cập nhật số lượng sản phẩm trong giỏ hàng
+// Tăng số lượng sản phẩm trong giỏ hàng
 export const increaseQuantity = async (req, res) => {
   try {
     const { gameId } = req.body;
@@ -106,7 +106,7 @@ export const increaseQuantity = async (req, res) => {
     // Lưu vào database
     await cart.save();
 
-    // Chuẩn hóa dữ liệu trả về thành map tương tự getCartData
+    // Chuẩn hóa dữ liệu trả về
     const cartData = {};
     cart.items.forEach((i) => {
       cartData[i.gameId] = i.quantity;
@@ -114,6 +114,53 @@ export const increaseQuantity = async (req, res) => {
 
     return res.status(200).json({
       message: "Tăng số lượng thành công",
+      cartData,
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Update thất bại" });
+  }
+};
+
+// Giảm số lượng sản phẩm
+export const decreaseQuantity = async (req, res) => {
+  try {
+    // Lấy userId từ JWT
+    const userId = req.user.userId;
+
+    // lấy gameId từ body
+    const { gameId } = req.body || {};
+
+    // Lấy giỏ hàng theo userId
+    const cart = await Cart.findOne({ userId });
+
+    // Tìm ra sản phẩm cần giảm số lượng
+    const item = cart.items.find(
+      (item) => String(item.gameId) === String(gameId)
+    );
+
+    // Giảm số lượng sản phẩm
+    if (item) {
+      // Nếu quantity < 1 thì xóa khỏi giỏ hàng
+      if (item.quantity <= 1) {
+        cart.items = cart.items.filter(
+          (item) => String(item.gameId) !== String(gameId)
+        );
+      } else {
+        item.quantity -= 1;
+      }
+    }
+
+    // Lưu vào database
+    await cart.save();
+
+    // Chuẩn hóa dữ liệu
+    const cartData = {};
+    cart.items.forEach((item) => {
+      cartData[item.gameId] = item.quantity;
+    });
+
+    return res.status(200).json({
+      message: "Giảm số lượng thành công",
       cartData,
     });
   } catch (error) {
