@@ -67,6 +67,7 @@ export const addToCart = async (req, res) => {
         await cart.save();
       }
     } else {
+      // Nếu chưa có giỏ hàng thì tạo mới
       await Cart.create({
         userId: userId,
         items: {
@@ -98,6 +99,7 @@ export const increaseQuantity = async (req, res) => {
     if (item) {
       item.quantity += 1;
     } else {
+      // Nếu chưa có sản phẩm thì set mặc định là 1
       await cart.items.push({ gameId, quantity: 1 });
     }
 

@@ -19,10 +19,12 @@ connectDB();
 // Import routes
 import gameRoute from "./routes/gameRoute.js";
 import userRoute from "./routes/userRoute.js";
+import cartRoute from "./routes/cartRoute.js";
 
 // Routes
 app.use("/api/game", gameRoute);
 app.use("/api/user", userRoute);
+app.use("/api/cart", cartRoute);
 
 // Start server
 const port = process.env.PORT || 3000;
