@@ -167,3 +167,38 @@ export const decreaseQuantity = async (req, res) => {
     res.status(500).json({ error: "Update thất bại" });
   }
 };
+
+// Xóa sản phẩm khỏi giỏ hàng
+export const deleteFromCart = async (req, res) => {
+  try {
+    // Lấy userId từ JWT
+    const userId = req.user.userId;
+
+    // Lấy gameId từ body
+    const { gameId } = req.body || {};
+
+    // Lấy giỏ hàng theo userId
+    const cart = await Cart.findOne({ userId });
+
+    // Xóa sản phẩm khỏi giỏ hàng
+    cart.items = cart.items.filter(
+      (item) => String(item.gameId) !== String(gameId)
+    );
+
+    // Lưu vào database
+    await cart.save();
+
+    // Chuẩn hóa dữ liệu
+    const cartData = {};
+    cart.items.forEach((item) => {
+      cartData[item.gameId] = item.quantity;
+    });
+
+    return res.status(200).json({
+      message: "Xóa sản phẩm thành công",
+      cartData,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Xóa sản phẩm thất bại" });
+  }
+};

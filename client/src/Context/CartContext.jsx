@@ -106,11 +106,26 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const deleteFromCart = async (gameId) => {
+    try {
+      // Gọi API xóa sản phẩm
+      await api.delete("/cart/delete", {
+        data: { gameId },
+      });
+
+      // Reload giỏ hàng
+      await reloadCart();
+    } catch (error) {
+      console.error("Lỗi khi xóa sản phẩm: ", error?.message);
+    }
+  };
+
   const contextValues = {
     cartItems,
     addToCart,
     increaseQuantity,
     decreaseQuantity,
+    deleteFromCart,
   };
 
   return (
