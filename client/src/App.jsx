@@ -12,6 +12,7 @@ import ProductDetail from "./Pages/ProductDetail";
 import DisplayGames from "./Pages/DisplayGames";
 import ScrollToTop from "./Components/ScrollToTop";
 import Admin from "./Pages/Admin";
+import CartDetail from "./Pages/CartDetail";
 
 function App() {
   return (
@@ -23,11 +24,15 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/new" element={<DisplayGames endpoint="new" />} />
         <Route path="/hot" element={<DisplayGames endpoint="hot" />} />
-        <Route path="/Windows" element={<DisplayGames endpoint="Windows" />} />
+        <Route
+          path="/Windows"
+          element={<DisplayGames endpoint="platform/Windows" />}
+        />
         <Route
           path="/Playstation"
-          element={<DisplayGames endpoint="Playstation" />}
+          element={<DisplayGames endpoint="platform/Playstation" />}
         />
+        <Route path="/cart" element={<CartDetail />} />
         <Route path="/product/:id" element={<ProductDetail />} />
 
         {/* Admin routes */}

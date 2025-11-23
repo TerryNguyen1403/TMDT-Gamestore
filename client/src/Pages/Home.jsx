@@ -15,14 +15,14 @@ const Home = () => {
       {/* Windows platform */}
       <ProductSection
         title="windows"
-        apiEndpoint="http://localhost:3000/api/game/Windows"
+        apiEndpoint="http://localhost:3000/api/game/platform/Windows"
         navigateTo="/Windows"
       />
 
       {/* Playstation platform */}
       <ProductSection
         title="playstation"
-        apiEndpoint="http://localhost:3000/api/game/Playstation"
+        apiEndpoint="http://localhost:3000/api/game/platform/Playstation"
         navigateTo="/Playstation"
       />
     </div>
