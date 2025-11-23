@@ -42,13 +42,13 @@ const DisplayGames = ({ endpoint }) => {
         break;
 
       //fetch Windows games
-      case "Windows":
-        fetchGames("Windows");
+      case "platform/Windows":
+        fetchGames("platform/Windows");
         break;
 
       //fetch Windows games
-      case "Playstation":
-        fetchGames("Playstation");
+      case "platform/Playstation":
+        fetchGames("platform/Playstation");
         break;
 
       default:
