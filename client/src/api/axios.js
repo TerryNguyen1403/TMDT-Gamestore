@@ -24,6 +24,7 @@ api.interceptors.response.use(
       localStorage.removeItem("userName");
       localStorage.removeItem("userEmail");
       localStorage.removeItem("userId");
+      localStorage.removeItem("isAdmin");
 
       // Notify app components (same-tab) to update UI
       try {

@@ -53,6 +53,7 @@ const Login = () => {
       localStorage.setItem("userEmail", userEmail);
       localStorage.setItem("userName", res.data.userName);
       localStorage.setItem("userId", res.data.userId);
+      localStorage.setItem("isAdmin", String(!!res.data.isAdmin));
 
       // Hiển thị toast
       showToastMessage("Đăng nhập thành công!", "success");
