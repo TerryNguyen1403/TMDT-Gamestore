@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, Navigate } from "react-router-dom";
 
 // Import components
 import Header from "./Components/Header";
@@ -15,6 +15,15 @@ import Admin from "./Pages/Admin";
 import CartDetail from "./Pages/CartDetail";
 
 function App() {
+  const RequireAdmin = ({ children }) => {
+    const token = localStorage.getItem("token");
+    const isAdmin = localStorage.getItem("isAdmin") === "true";
+
+    if (!token) return <Navigate to="/login" replace />;
+    if (!isAdmin) return <Navigate to="/" replace />;
+    return children;
+  };
+
   return (
     <BrowserRouter>
       <Header />
@@ -36,8 +45,14 @@ function App() {
         <Route path="/product/:id" element={<ProductDetail />} />
 
         {/* Admin routes */}
-
-        <Route path="/admin" element={<Admin />} />
+        <Route
+          path="/admin"
+          element={
+            <RequireAdmin>
+              <Admin />
+            </RequireAdmin>
+          }
+        />
       </Routes>
       <ScrollToTop />
       <Footer />
