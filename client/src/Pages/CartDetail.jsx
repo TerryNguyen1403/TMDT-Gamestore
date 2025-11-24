@@ -1,5 +1,5 @@
 import { Container, Row, Col, Card, Button, Form } from "react-bootstrap";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 // Import utils
 import { formatPrice } from "../utils/formatPrice";
@@ -12,8 +12,16 @@ const CartDetail = () => {
   // Sử dụng context
   const { games } = useContext(GameContext);
   const { contextValues } = useContext(CartContext);
-  const { cartItems, decreaseQuantity, increaseQuantity, deleteFromCart } =
-    contextValues || {};
+  const {
+    cartItems,
+    decreaseQuantity,
+    increaseQuantity,
+    deleteFromCart,
+    getTotalAmount,
+  } = contextValues || {};
+
+  // Khai báo các biến state
+  const [totalAmount, setTotalAmount] = useState(0);
 
   // Lấy chi tiết sản phảm
   const gameDetail = (cartItems || []).map(({ id, quantity }) => {
@@ -27,17 +35,29 @@ const CartDetail = () => {
     0
   );
 
-  const totalAmount = items.reduce((sum, { game, quantity }) => {
-    const discount = Number(game?.discount ?? 0);
-    const unitPrice = Number(game?.price ?? 0);
-    if (discount) {
-      return (
-        sum + (unitPrice - (unitPrice * discount) / 100) * Number(quantity ?? 0)
-      );
-    } else {
-      return sum + unitPrice * Number(quantity ?? 0);
+  // Xử lý sự kiện nhấn nút 'Thanh toán với VNPAY'
+  const onClickOrder = async () => {
+    try {
+      // Dữ liệu truyền cho VNPAY
+      const order = {
+        amount: await getTotalAmount(localStorage.getItem("userId")),
+        bankCode: "",
+        language: "vn",
+        user_id: localStorage.getItem("userId"),
+      };
+    } catch (error) {
+      console.error(`Lỗi khi đặt hàng: ${error.message}`);
     }
-  }, 0);
+  };
+
+  // fetch tổng tiền
+  const fetchTotal = async () => {
+    const total = await getTotalAmount(localStorage.getItem("userId"));
+    setTotalAmount(total);
+  };
+  useEffect(() => {
+    fetchTotal();
+  }, [cartItems]);
 
   return (
     <section className="h-100 h-custom" style={{ backgroundColor: "#eee" }}>
@@ -169,7 +189,12 @@ const CartDetail = () => {
                         <h5>{formatPrice(totalAmount)}</h5>
                       </div>
 
-                      <Button variant="dark" size="lg" className="w-100">
+                      <Button
+                        variant="dark"
+                        size="lg"
+                        className="w-100"
+                        onClick={onClickOrder}
+                      >
                         Thanh toán với VNPAY
                       </Button>
                     </div>

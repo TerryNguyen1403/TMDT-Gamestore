@@ -106,6 +106,7 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  // Xóa sản phẩm khỏi giỏ hàng
   const deleteFromCart = async (gameId) => {
     try {
       // Gọi API xóa sản phẩm
@@ -120,12 +121,26 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  // Lấy ra tổng tiền của sản phẩm
+  const getTotalAmount = async () => {
+    try {
+      const response = await api.get("/cart/total");
+
+      await reloadCart();
+
+      return response.data.totalAmount;
+    } catch (error) {
+      console.error(`Lỗi khi tính tổng tiền của giỏ hàng: ${error.message}`);
+    }
+  };
+
   const contextValues = {
     cartItems,
     addToCart,
     increaseQuantity,
     decreaseQuantity,
     deleteFromCart,
+    getTotalAmount,
   };
 
   return (

@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
 import Cart from "../model/Cart.js";
+import Game from "../model/Game.js";
 import "dotenv/config";
 
 export const getCart = async (req, res) => {
@@ -200,5 +200,50 @@ export const deleteFromCart = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: "Xóa sản phẩm thất bại" });
+  }
+};
+
+// Lấy tổng tiền giỏ hàng
+export const getTotalAmount = async (req, res) => {
+  try {
+    // Lấy userId từ JWT
+    const userId = req.user.userId;
+
+    // Lấy ra giỏ hàng theo userId
+    const cart = await Cart.findOne({ userId: userId });
+
+    const items = cart.items;
+
+    // JOIN collection game
+    const gameDetails = await Promise.all(
+      cart.items.map(async (item) => {
+        const game = await Game.findById(item.gameId);
+        return {
+          ...item._doc,
+          gameName: game.gameName,
+          price: game.price,
+          discount: game.discount,
+        };
+      })
+    );
+
+    // Tính tổng tiền
+    const totalAmount = gameDetails.reduce((sum, item) => {
+      if (item.discount !== 0) {
+        return (
+          sum +
+          (item.price - (item.price * item.discount) / 100) * item.quantity
+        );
+      } else {
+        return sum + item.price * item.quantity;
+      }
+    }, 0);
+
+    res.status(200).json({
+      message: "Tính tổng tiền giỏ hàng thành công",
+      totalAmount,
+    });
+  } catch (error) {
+    res.status(500).json({ message: "Lấy tổng tiền giỏ hàng thất bại" });
   }
 };
