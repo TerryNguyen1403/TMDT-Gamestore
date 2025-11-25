@@ -22,15 +22,23 @@ import Notification from "./Notification";
 const Detail = ({ game }) => {
   // Import và sử dụng context
   const { contextValues } = useContext(CartContext);
-  const { addToCart } = contextValues || {};
+  const { addToCart, increaseQuantity } = contextValues || {};
 
   // Khai báo state
   const [showNotification, setShowNotification] = useState(false);
+  const [quantity, setQuantity] = useState(1);
 
-  const handleAddToCart = () => {
-    addToCart(game._id);
-    setShowNotification(true),
-      setTimeout(() => setShowNotification(false), 1500);
+  const handleAddToCart = async () => {
+    if (!game?._id) return;
+    const qty =
+      Number.isFinite(quantity) && quantity > 0 ? Math.floor(quantity) : 1;
+    await addToCart(game._id);
+    // Tăng thêm số lượng nếu người dùng chọn > 1
+    for (let i = 1; i < qty; i++) {
+      await increaseQuantity(game._id);
+    }
+    setShowNotification(true);
+    setTimeout(() => setShowNotification(false), 1000);
   };
 
   if (!game) {
@@ -89,7 +97,28 @@ const Detail = ({ game }) => {
             </Card.Body>
           </Card>
 
-          {/* Nút thêm vào giỏ hàng */}
+          {/* Số lượng và nút thêm vào giỏ hàng */}
+          <div className="mb-3 d-flex align-items-center gap-2">
+            <label className="mb-0" style={{ minWidth: 80 }}>
+              Số lượng:
+            </label>
+            <input
+              type="number"
+              min={1}
+              value={quantity}
+              onChange={(e) => {
+                const v = parseInt(e.target.value, 10);
+                if (Number.isNaN(v) || v < 1) setQuantity(1);
+                else setQuantity(v);
+              }}
+              style={{
+                width: 80,
+                padding: "6px 8px",
+                borderRadius: 6,
+                border: "1px solid #ced4da",
+              }}
+            />
+          </div>
           <Button size="lg" className="mb-3" onClick={handleAddToCart}>
             Thêm vào giỏ hàng
           </Button>
