@@ -13,6 +13,8 @@ import DisplayGames from "./Pages/DisplayGames";
 import ScrollToTop from "./Components/ScrollToTop";
 import Admin from "./Pages/Admin";
 import CartDetail from "./Pages/CartDetail";
+import AdminProvider from "./Context/AdminContext";
+import VnpayReturn from "./Pages/VnpayReturn";
 
 function App() {
   const RequireAdmin = ({ children }) => {
@@ -43,13 +45,16 @@ function App() {
         />
         <Route path="/cart" element={<CartDetail />} />
         <Route path="/product/:id" element={<ProductDetail />} />
+        <Route path="/vnpay_return" element={<VnpayReturn />} />
 
         {/* Admin routes */}
         <Route
           path="/admin"
           element={
             <RequireAdmin>
-              <Admin />
+              <AdminProvider>
+                <Admin />
+              </AdminProvider>
             </RequireAdmin>
           }
         />

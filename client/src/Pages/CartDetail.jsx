@@ -45,6 +45,18 @@ const CartDetail = () => {
         language: "vn",
         user_id: localStorage.getItem("userId"),
       };
+
+      let url = `http://localhost:3000/api/orders/create_payment_url`;
+      const response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(order),
+      });
+
+      // Trả về kết quả
+      const result = await response.json();
+      // Chuyển hướng đến VNPAY
+      window.location.href = result.paymentUrl;
     } catch (error) {
       console.error(`Lỗi khi đặt hàng: ${error.message}`);
     }
@@ -133,9 +145,33 @@ const CartDetail = () => {
                               </Button>
                             </Col>
                             <Col md={3} lg={2} xl={2} className="text-end">
-                              <h6 className="mb-0">
-                                {formatPrice(game.price * quantity)}
-                              </h6>
+                              {Number(game.discount) !== 0 ? (
+                                <h6
+                                  className="mb-0"
+                                  style={{ whiteSpace: "nowrap" }}
+                                >
+                                  <span className="fw-bold me-2">
+                                    {`${formatPrice(
+                                      game.price *
+                                        (1 - Number(game.discount) / 100) *
+                                        quantity
+                                    )} ₫`}
+                                  </span>
+                                  <span
+                                    className="text-muted"
+                                    style={{ textDecoration: "line-through" }}
+                                  >
+                                    {`${formatPrice(game.price * quantity)} ₫`}
+                                  </span>
+                                </h6>
+                              ) : (
+                                <h6
+                                  className="mb-0"
+                                  style={{ whiteSpace: "nowrap" }}
+                                >
+                                  {`${formatPrice(game.price * quantity)} đ`}
+                                </h6>
+                              )}
                             </Col>
                             <Col md={1} lg={1} xl={1} className="text-end">
                               <button
@@ -186,7 +222,7 @@ const CartDetail = () => {
 
                       <div className="d-flex justify-content-between mb-5">
                         <h5 className="text-uppercase">Tổng tiền</h5>
-                        <h5>{formatPrice(totalAmount)}</h5>
+                        <h5>{formatPrice(totalAmount)} ₫</h5>
                       </div>
 
                       <Button
