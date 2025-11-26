@@ -21,8 +21,6 @@ export const getCart = async (req, res) => {
 
     res.status(200).json({
       cartData,
-      totalPrice: cart.totalPrice,
-      voucher: cart.voucher,
     });
   } catch (error) {
     res.status(500).json({ message: "Lấy dữ liệu giỏ hàng thất bại" });
@@ -211,8 +209,6 @@ export const getTotalAmount = async (req, res) => {
 
     // Lấy ra giỏ hàng theo userId
     const cart = await Cart.findOne({ userId: userId });
-
-    const items = cart.items;
 
     // JOIN collection game
     const gameDetails = await Promise.all(
