@@ -22,10 +22,12 @@ import userRoute from "./routes/userRoute.js";
 import cartRoute from "./routes/cartRoute.js";
 import adminRoute from "./routes/adminRoute.js";
 import orderRoute from "./routes/orderRoute.js";
+import userOrderRoute from "./routes/userOrderRoute.js";
 
 // Routes
 app.use("/api/game", gameRoute);
 app.use("/api/user", userRoute);
+app.use("/api/user/order", userOrderRoute);
 app.use("/api/cart", cartRoute);
 app.use("/api/admin", adminRoute);
 app.use("/api/orders", orderRoute);

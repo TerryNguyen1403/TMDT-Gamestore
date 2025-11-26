@@ -13,8 +13,12 @@ import DisplayGames from "./Pages/DisplayGames";
 import ScrollToTop from "./Components/ScrollToTop";
 import Admin from "./Pages/Admin";
 import CartDetail from "./Pages/CartDetail";
-import AdminProvider from "./Context/AdminContext";
 import VnpayReturn from "./Pages/VnpayReturn";
+import Order from "./Pages/Order";
+
+// Import Providers
+import AdminProvider from "./Context/AdminContext";
+import OrderProvider from "./Context/OrderContext";
 
 function App() {
   const RequireAdmin = ({ children }) => {
@@ -42,6 +46,14 @@ function App() {
         <Route
           path="/Playstation"
           element={<DisplayGames endpoint="platform/Playstation" />}
+        />
+        <Route
+          path="/order"
+          element={
+            <OrderProvider>
+              <Order />
+            </OrderProvider>
+          }
         />
         <Route path="/cart" element={<CartDetail />} />
         <Route path="/product/:id" element={<ProductDetail />} />

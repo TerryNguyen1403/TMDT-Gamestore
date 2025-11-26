@@ -136,6 +136,11 @@ router.post("/create_payment_url", async function (req, res, next) {
     vnp_Params["vnp_TxnRef"] = String(result._id);
   }
 
+  // Bổ sung hạn thanh toán để client không lỗi timer và override số tiền theo giỏ hàng
+  // const expireDate = moment(date).add(15, "minutes").format("YYYYMMDDHHmmss");
+  // vnp_Params["vnp_ExpireDate"] = expireDate;
+  // vnp_Params["vnp_Amount"] = Math.round(totalAmount * 100);
+
   vnp_Params = sortObject(vnp_Params);
 
   let signData = qs.stringify(vnp_Params, { encode: false });
