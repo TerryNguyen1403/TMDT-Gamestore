@@ -10,18 +10,47 @@ import {
 } from "react-bootstrap";
 import { PeopleFill, BoxFill, CartFill, Search } from "react-bootstrap-icons";
 
+// Import context
+import { AdminContext } from "../Context/AdminContext";
+import { useContext, useMemo, useState } from "react";
+
 const Admin = () => {
+  // Sử dụng context
+  const { totalUsers, users = [] } = useContext(AdminContext) || {};
+  const [query, setQuery] = useState("");
+  const [tab, setTab] = useState("overview");
+
+  const filteredUsers = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return users;
+    return users.filter((u) =>
+      [u.userName, u.email].some((v) =>
+        String(v || "")
+          .toLowerCase()
+          .includes(q)
+      )
+    );
+  }, [users, query]);
+
   return (
     <Container className="my-5">
       <h2 className="fw-bold mb-4 text-center" style={{ color: "#ff6b35" }}>
         Trang quản lý
       </h2>
 
-      <Tabs className="mb-4" defaultActiveKey="overview">
+      <Tabs
+        className="mb-4"
+        activeKey={tab}
+        onSelect={(k) => setTab(k || "overview")}
+      >
         <Tab eventKey="overview" title="Tổng quan">
           <Row className="g-4 justify-content-center mt-3">
             <Col md={6} lg={3}>
-              <Card className="p-3 shadow-sm border-0 h-100">
+              <Card
+                className="p-3 shadow-sm border-0 h-100"
+                onClick={() => setTab("users")}
+                style={{ cursor: "pointer" }}
+              >
                 <div className="d-flex align-items-center">
                   <PeopleFill
                     size={40}
@@ -30,6 +59,7 @@ const Admin = () => {
                   />
                   <div>
                     <h5 className="mb-0 fw-bold"></h5>
+                    <h5 className="mb-0 fw-bold">{totalUsers}</h5>
                     <small className="text-muted">Người dùng</small>
                   </div>
                 </div>
@@ -37,7 +67,11 @@ const Admin = () => {
             </Col>
 
             <Col md={6} lg={3}>
-              <Card className="p-3 shadow-sm border-0 h-100">
+              <Card
+                className="p-3 shadow-sm border-0 h-100"
+                onClick={() => setTab("products")}
+                style={{ cursor: "pointer" }}
+              >
                 <div className="d-flex align-items-center">
                   <BoxFill
                     size={40}
@@ -53,7 +87,11 @@ const Admin = () => {
             </Col>
 
             <Col md={6} lg={3}>
-              <Card className="p-3 shadow-sm border-0 h-100">
+              <Card
+                className="p-3 shadow-sm border-0 h-100"
+                onClick={() => setTab("orders")}
+                style={{ cursor: "pointer" }}
+              >
                 <div className="d-flex align-items-center">
                   <CartFill
                     size={40}
@@ -91,6 +129,8 @@ const Admin = () => {
                 <Form.Control
                   type="text"
                   placeholder="Tìm kiếm theo tên hoặc email..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
                 />
               </div>
             </div>
@@ -104,11 +144,29 @@ const Admin = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td colSpan={4} className="text-center text-muted">
-                    (Chưa có dữ liệu)
-                  </td>
-                </tr>
+                {filteredUsers.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="text-center text-muted">
+                      (Không tìm thấy người dùng)
+                    </td>
+                  </tr>
+                ) : (
+                  filteredUsers.map((u) => (
+                    <tr key={u._id}>
+                      <td>{u.userName}</td>
+                      <td>{u.email}</td>
+                      <td>{u.isAdmin ? "Admin" : "User"}</td>
+                      <td>
+                        <button
+                          className="btn btn-sm btn-outline-secondary"
+                          disabled
+                        >
+                          Sửa
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </Table>
           </Card>
