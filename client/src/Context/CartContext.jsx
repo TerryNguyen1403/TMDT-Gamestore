@@ -134,6 +134,18 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  // Lấy ra số lượng sản phẩm trong giỏ hàng
+  const getTotalItems = async () => {
+    try {
+      const response = await api.get("/cart");
+
+      await reloadCart();
+      return response.data.cartData;
+    } catch (error) {
+      console.error(`Lỗi khi lấy tổng sản phẩm của giỏ hàng: ${error.message}`);
+    }
+  };
+
   const contextValues = {
     cartItems,
     addToCart,
@@ -141,6 +153,7 @@ export const CartProvider = ({ children }) => {
     decreaseQuantity,
     deleteFromCart,
     getTotalAmount,
+    getTotalItems,
   };
 
   return (

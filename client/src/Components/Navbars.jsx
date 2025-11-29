@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Navbar,
@@ -15,7 +15,7 @@ import { CartFill } from "react-bootstrap-icons";
 import logo from "../assets/logo.png";
 
 // Import context
-// import { CartContext } from "../../Context/CartContext";
+import { CartContext } from "../Context/CartContext";
 
 const Navbars = () => {
   // Tạo menu
@@ -35,7 +35,8 @@ const Navbars = () => {
   const [dropdownMenu, setDropdownMenu] = useState(false);
 
   // Hàm hiển thị số lượng
-  //   const { getTotalItems } = useContext(CartContext);
+  const { contextValues } = useContext(CartContext);
+  const { cartItems } = contextValues || {};
 
   useEffect(() => {
     // Lấy userName từ localStorage khi load page
@@ -111,6 +112,7 @@ const Navbars = () => {
     localStorage.removeItem("userName");
     localStorage.removeItem("userId");
     localStorage.removeItem("token");
+    localStorage.removeItem("isAdmin");
     setUserName(null);
     try {
       window.dispatchEvent(new Event("logout"));
@@ -183,14 +185,20 @@ const Navbars = () => {
             <Badge
               bg="secondary"
               pill
-              className="position-absolute translate-middle"
+              className="position-absolute d-flex align-items-center justify-content-center"
               style={{
-                fontSize: "0.7rem",
-                top: "0",
-                left: "100%",
+                fontSize: "0.65rem",
+                width: 20,
+                height: 20,
+                top: -6,
+                right: -6,
+                borderRadius: 999,
               }}
             >
-              {/* {getTotalItems()} */}
+              {(cartItems || []).reduce(
+                (sum, it) => sum + (it?.quantity || 0),
+                0
+              )}
             </Badge>
           </Nav.Link>
 
