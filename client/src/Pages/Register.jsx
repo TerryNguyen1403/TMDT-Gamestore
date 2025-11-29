@@ -56,25 +56,29 @@ const Register = () => {
         password: userPassword,
       });
 
-      setMessage(res.data.message); // Đăng ký thành công
+      if (res.data.message === "Email đã tồn tại trong cơ sở dữ liệu") {
+        showToastMessage(res.data.message, "Danger");
+      } else {
+        // await axios.post("http://localhost:3000/api/user/login", {
+        //   email: userEmail,
+        //   password: userPassword,
+        // });
+        // // Lưu thông tin vào localStorage
+        // localStorage.setItem("token", res.data.token);
 
-      // Hiển thị toast
-      showToastMessage("Đăng ký thành công!", "success");
-
-      if (toastMessage === "Đăng ký thành công!") {
-        await axios.post("http://localhost:3000/api/user/login", {
-          email: userEmail,
-          password: userPassword,
-        });
+        showToastMessage(res.data.message, "success");
+        // Đăng nhập và chuyển hướng về trang chủ
+        setTimeout(() => {
+          navigator("/login");
+        }, 1500);
       }
+      //   setMessage(res.data.message); // Đăng ký thành công
 
-      // Lưu thông tin vào localStorage
-      localStorage.setItem("token", res.data.token);
+      // // Hiển thị toast
+      // showToastMessage("Đăng ký thành công!", "success");
 
-      // Đăng nhập và chuyển hướng về trang chủ
-      setTimeout(() => {
-        navigator("/");
-      }, 1500);
+      // if (toastMessage === "Đăng ký thành công!") {
+      // }
     } catch (error) {
       let errorMessage = "Đăng ký thất bại!";
 

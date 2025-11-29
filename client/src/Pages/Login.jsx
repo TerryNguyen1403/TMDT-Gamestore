@@ -48,21 +48,24 @@ const Login = () => {
         password: userPassword,
       });
 
-      // Lưu token vào localStorage
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("userEmail", userEmail);
-      localStorage.setItem("userName", res.data.userName);
-      localStorage.setItem("userId", res.data.userId);
-      localStorage.setItem("isAdmin", String(!!res.data.isAdmin));
-
       // Hiển thị toast
-      showToastMessage("Đăng nhập thành công!", "success");
+      if (res.data.message === "User không tồn tại trong hệ thống") {
+        showToastMessage(res.data.message, "Danger");
+      } else {
+        showToastMessage("Đăng nhập thành công!", "success");
+        // Lưu token vào localStorage
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("userEmail", userEmail);
+        localStorage.setItem("userName", res.data.userName);
+        localStorage.setItem("userId", res.data.userId);
+        localStorage.setItem("isAdmin", String(!!res.data.isAdmin));
 
-      // Chuyển hướng sau khi login thành công
-      window.dispatchEvent(new Event("storageUpdated"));
-      setTimeout(() => {
-        navigate("/");
-      }, 1500);
+        // Chuyển hướng sau khi login thành công
+        window.dispatchEvent(new Event("storageUpdated"));
+        setTimeout(() => {
+          navigate("/");
+        }, 1500);
+      }
     } catch (error) {
       let errorMessage = "Đăng nhập thất bại!";
 
