@@ -8,25 +8,22 @@ export const verify = async (req, res, next) => {
 
   // Kiểm tra
   if (!authHeader) {
-    console.error("No authorization header provided");
     return res.status(401).json({ message: "Không tìm thấy token" });
   }
 
   try {
-    // Xác thực token - tách "Bearer " prefix
+    // Xác thực token
     let token = authHeader;
     if (authHeader.startsWith("Bearer ")) {
       token = authHeader.slice(7);
     }
-    
+
     const verified = jwt.verify(token, process.env.JWT_SECRET);
     req.user = verified;
-    console.log("Token verified for user:", verified);
 
     // Đi đến tác vụ tiếp theo
     next();
   } catch (error) {
-    console.error("Token verification error:", error.message);
     return res.status(401).json({ message: "Token không hợp lệ!" });
   }
 };
@@ -36,7 +33,7 @@ export const adminOnly = async (req, res, next) => {
   try {
     const userId = req?.user?.userId;
     console.log("Checking admin access for userId:", userId);
-    
+
     if (!userId) {
       console.error("No userId found in token");
       return res.status(403).json({ message: "Không có userId trong token" });
@@ -49,7 +46,7 @@ export const adminOnly = async (req, res, next) => {
     }
 
     console.log("User isAdmin status:", user.isAdmin);
-    
+
     if (!user.isAdmin) {
       console.error("User is not admin:", userId);
       return res
