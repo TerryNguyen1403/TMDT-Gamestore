@@ -86,8 +86,10 @@ export const createGame = async (req, res) => {
     });
 
     const savedGame = await newGame.save();
-    const populatedGame = await savedGame.populate("platform", "platformName").populate("genres", "genreName");
-
+    const populatedGame = await Game.findById(savedGame._id)
+      .populate("platform", "platformName")
+      .populate("genres", "genreName");
+      
     res.status(201).json(populatedGame);
   } catch (error) {
     res.status(500).json({ message: error.message });
