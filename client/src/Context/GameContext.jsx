@@ -6,12 +6,14 @@ export const GameContext = createContext(null);
 
 const GameContextProvider = (props) => {
   const [games, setGames] = useState([]);
+  const [gamesLength, setGamesLength] = useState(0);
 
   useEffect(() => {
     const fetchGames = async () => {
       try {
         const response = await api.get("/game/all");
-        setGames(response.data);
+        setGames(response.data.games);
+        setGamesLength(response.data.totalGames);
       } catch (error) {
         console.error("Xảy ra lỗi khi fetch sản phẩm: ", error);
       }
@@ -22,6 +24,7 @@ const GameContextProvider = (props) => {
 
   const contextValue = {
     games,
+    gamesLength,
   };
 
   return (

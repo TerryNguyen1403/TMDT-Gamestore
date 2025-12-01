@@ -14,11 +14,11 @@ import ScrollToTop from "./Components/ScrollToTop";
 import Admin from "./Pages/Admin";
 import CartDetail from "./Pages/CartDetail";
 import VnpayReturn from "./Pages/VnpayReturn";
-// import Order from "./Pages/Order";
+import Order from "./Pages/Order";
 
 // Import Providers
 import AdminProvider from "./Context/AdminContext";
-// import OrderProvider from "./Context/OrderContext";
+import OrderProvider from "./Context/OrderContext";
 
 function App() {
   const RequireAdmin = ({ children }) => {
@@ -47,14 +47,14 @@ function App() {
           path="/Playstation"
           element={<DisplayGames endpoint="platform/Playstation" />}
         />
-        {/* <Route
+        <Route
           path="/order"
           element={
             <OrderProvider>
               <Order />
             </OrderProvider>
           }
-        /> */}
+        />
         <Route path="/cart" element={<CartDetail />} />
         <Route path="/product/:id" element={<ProductDetail />} />
         <Route path="/vnpay_return" element={<VnpayReturn />} />

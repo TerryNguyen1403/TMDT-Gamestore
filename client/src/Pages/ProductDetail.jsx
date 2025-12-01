@@ -9,24 +9,22 @@ import { useContext, useEffect, useState } from "react";
 
 const ProductDetail = () => {
   // Use context
-  const { games } = useContext(GameContext);
+  const { games, gamesLength } = useContext(GameContext);
   const { id, platform } = useParams();
   const navigator = useNavigate();
   const [loading, setLoading] = useState(true);
   const [game, setGame] = useState(null);
 
   useEffect(() => {
-    if (games && games.length > 0) {
-      const found = games.find((game) => game._id === id);
-
+    if (gamesLength > 0) {
+      const found = games.find((g) => String(g._id) === String(id));
       if (found) {
         setGame(found);
       } else {
-        alert("Không tìm thấy game");
-        navigator("/");
+        setTimeout(() => navigator("/"), 1000);
       }
-      setLoading(false);
     }
+    setLoading(false);
   }, [games, id, navigator]);
 
   return (
@@ -45,8 +43,10 @@ const ProductDetail = () => {
           Đang tải....
         </p>
       )}
-      <BreadCrumb game={game} platformParam={platform} />
-      <Detail game={game} />
+      <>
+        <BreadCrumb game={game} platformParam={platform} />
+        <Detail game={game} />
+      </>
     </>
   );
 };
