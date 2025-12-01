@@ -18,7 +18,16 @@ import config from "config";
 import qs from "qs";
 import crypto from "crypto";
 
+// Import order controller
+import { getAllOrders, getOrderById, updateOrderStatus } from "../controller/orderController.js";
+import { verify, adminOnly } from "../middleware/authUser.js";
+
 let router = express.Router();
+
+// Admin routes for order management
+router.get("/all", verify, adminOnly, getAllOrders);
+router.get("/:orderId", verify, getOrderById);
+router.put("/:orderId/status", verify, adminOnly, updateOrderStatus);
 
 router.get("/", function (req, res, next) {
   res.render("orderlist", { title: "Danh sách đơn hàng" });

@@ -3,39 +3,44 @@ import {
   Row,
   Col,
   Card,
-  Table,
-  Form,
   Tabs,
   Tab,
 } from "react-bootstrap";
-import { PeopleFill, BoxFill, CartFill, Search } from "react-bootstrap-icons";
+import { PeopleFill, BoxFill, CartFill } from "react-bootstrap-icons";
 
 // Import context
 import { AdminContext } from "../Context/AdminContext";
-import { useContext, useMemo, useState } from "react";
+import { useContext, useState } from "react";
+
+// Import component con
+import AdminUsers from "./AdminUsers";
+import AdminProducts from "./AdminProducts";
+import AdminOrders from "./AdminOrders";
 
 const Admin = () => {
-  // Sử dụng context
-  const { totalUsers, users = [] } = useContext(AdminContext) || {};
-  const [query, setQuery] = useState("");
-  const [tab, setTab] = useState("overview");
+  // Sử dụng context
+  const {
+    totalUsers,
+    users = [],
+    totalGames,
+    games = [],
+    createGame,
+    updateGame,
+    deleteGame,
+    fetchTotalGames,
+    loadingAdmin,
+    platforms = [],
+    genres = [],
+    orders = [],
+    totalOrders = 0,
+  } = useContext(AdminContext) || {};
 
-  const filteredUsers = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) return users;
-    return users.filter((u) =>
-      [u.userName, u.email].some((v) =>
-        String(v || "")
-          .toLowerCase()
-          .includes(q)
-      )
-    );
-  }, [users, query]);
+  const [tab, setTab] = useState("overview");
 
   return (
     <Container className="my-5">
       <h2 className="fw-bold mb-4 text-center" style={{ color: "#ff6b35" }}>
-        Trang quản lý
+        Trang quản lý
       </h2>
 
       <Tabs
@@ -58,7 +63,6 @@ const Admin = () => {
                     style={{ color: "#4a90e2" }}
                   />
                   <div>
-                    <h5 className="mb-0 fw-bold"></h5>
                     <h5 className="mb-0 fw-bold">{totalUsers}</h5>
                     <small className="text-muted">Người dùng</small>
                   </div>
@@ -79,7 +83,7 @@ const Admin = () => {
                     style={{ color: "#f39c12" }}
                   />
                   <div>
-                    <h5 className="mb-0 fw-bold"></h5>
+                    <h5 className="mb-0 fw-bold">{totalGames}</h5>
                     <small className="text-muted">Sản phẩm</small>
                   </div>
                 </div>
@@ -99,7 +103,7 @@ const Admin = () => {
                     style={{ color: "#27ae60" }}
                   />
                   <div>
-                    <h5 className="mb-0 fw-bold"></h5>
+                    <h5 className="mb-0 fw-bold">{totalOrders}</h5>
                     <small className="text-muted">Đơn hàng</small>
                   </div>
                 </div>
@@ -117,124 +121,25 @@ const Admin = () => {
         </Tab>
 
         <Tab eventKey="users" title="Người dùng">
-          <Card className="shadow-sm border-0 p-4">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <h4 className="fw-bold mb-0">Quản lý người dùng</h4>
-            </div>
-            <div className="mb-3">
-              <div className="input-group">
-                <span className="input-group-text">
-                  <Search />
-                </span>
-                <Form.Control
-                  type="text"
-                  placeholder="Tìm kiếm theo tên hoặc email..."
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                />
-              </div>
-            </div>
-            <Table responsive hover>
-              <thead className="table-light">
-                <tr>
-                  <th>Tên</th>
-                  <th>Email</th>
-                  <th>Vai trò</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredUsers.length === 0 ? (
-                  <tr>
-                    <td colSpan={4} className="text-center text-muted">
-                      (Không tìm thấy người dùng)
-                    </td>
-                  </tr>
-                ) : (
-                  filteredUsers.map((u) => (
-                    <tr key={u._id}>
-                      <td>{u.userName}</td>
-                      <td>{u.email}</td>
-                      <td>{u.isAdmin ? "Admin" : "User"}</td>
-                      <td>
-                        <button
-                          className="btn btn-sm btn-outline-secondary"
-                          disabled
-                        >
-                          Sửa
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </Table>
-          </Card>
+          <AdminUsers totalUsers={totalUsers} users={users} />
         </Tab>
 
         <Tab eventKey="products" title="Sản phẩm">
-          <Card className="shadow-sm border-0 p-4">
-            <div className="d-flex justify-content-between align-items-center mb-3">
-              <h4 className="fw-bold mb-0">Quản lý sản phẩm</h4>
-            </div>
-
-            <div className="mb-3">
-              <div className="input-group">
-                <span className="input-group-text">
-                  <Search />
-                </span>
-                <Form.Control
-                  type="text"
-                  placeholder="Tìm kiếm theo tên hoặc danh mục..."
-                />
-              </div>
-            </div>
-
-            <Table responsive hover>
-              <thead className="table-light">
-                <tr>
-                  <th>Tên sản phẩm</th>
-                  <th>Giá</th>
-                  <th>Danh mục</th>
-                  <th>Tồn kho</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td colSpan={5} className="text-center text-muted">
-                    (Chưa có dữ liệu)
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
-          </Card>
+          <AdminProducts
+            totalGames={totalGames}
+            games={games}
+            platforms={platforms}
+            genres={genres}
+            createGame={createGame}
+            updateGame={updateGame}
+            deleteGame={deleteGame}
+            fetchTotalGames={fetchTotalGames}
+            loadingAdmin={loadingAdmin}
+          />
         </Tab>
 
         <Tab eventKey="orders" title="Đơn hàng">
-          <Card className="shadow-sm border-0 p-4">
-            <h4 className="fw-bold mb-3">Quản lý đơn hàng</h4>
-
-            <Table responsive hover>
-              <thead className="table-light">
-                <tr>
-                  <th>Mã đơn</th>
-                  <th>Khách hàng</th>
-                  <th>Sản phẩm</th>
-                  <th>Tổng tiền</th>
-                  <th>Trạng thái</th>
-                  <th>Thao tác</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td colSpan={6} className="text-center text-muted">
-                    (Chưa có dữ liệu)
-                  </td>
-                </tr>
-              </tbody>
-            </Table>
-          </Card>
+          <AdminOrders orders={orders} totalOrders={totalOrders} />
         </Tab>
       </Tabs>
     </Container>

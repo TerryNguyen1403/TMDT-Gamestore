@@ -5,6 +5,8 @@ import {
   gameByPlatform,
   hotGames,
   newGames,
+  getAllPlatforms,
+  getAllGenres,
 } from "../controller/gameController.js";
 
 const router = express.Router();
@@ -14,5 +16,7 @@ router.get("/new", newGames);
 router.get("/hot", hotGames);
 router.get("/id/:gameId", gameById);
 router.get("/platform/:platformName", gameByPlatform);
+router.get("/platforms/list/all", getAllPlatforms);
+router.get("/genres/list/all", getAllGenres);
 
 export default router;

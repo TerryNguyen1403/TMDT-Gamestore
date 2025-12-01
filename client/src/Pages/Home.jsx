@@ -7,7 +7,7 @@ const Home = () => {
       <CarouselComponent />
       {/* New games */}
       <ProductSection
-        title="mới"
+        title="mới"
         apiEndpoint="http://localhost:3000/api/game/new"
         navigateTo="/new"
       />
