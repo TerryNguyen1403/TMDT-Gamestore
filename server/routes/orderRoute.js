@@ -24,11 +24,6 @@ import { verify, adminOnly } from "../middleware/authUser.js";
 
 let router = express.Router();
 
-// Admin routes for order management
-router.get("/all", verify, adminOnly, getAllOrders);
-router.get("/:orderId", verify, getOrderById);
-router.put("/:orderId/status", verify, adminOnly, updateOrderStatus);
-
 router.get("/", function (req, res, next) {
   res.render("orderlist", { title: "Danh sách đơn hàng" });
 });
@@ -264,6 +259,13 @@ router.get("/vnpay_ipn", function (req, res, next) {
     res.status(200).json({ RspCode: "97", Message: "Checksum failed" });
   }
 });
+
+// Admin routes với authentication - đặt sau VNPAY routes, trước dynamic routes
+router.get("/all", verify, adminOnly, getAllOrders);
+router.put("/:orderId/status", verify, adminOnly, updateOrderStatus);
+
+// Dynamic routes PHẢI đặt CUỐI CÙNG
+router.get("/:orderId", verify, getOrderById);
 
 router.post("/querydr", function (req, res, next) {
   process.env.TZ = "Asia/Ho_Chi_Minh";
