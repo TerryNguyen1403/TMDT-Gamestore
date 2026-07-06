@@ -11,18 +11,31 @@ services:
       - mongo-data:/data/db
 
   server:
-    build: ./server
+    image: terrynguyen1403/tmdt-gamestore-server:v1.0.0
 
     restart: unless-stopped
 
     ports:
       - "3000:3000"
 
-    env_file:
-      - ./server/.env
+    environment:
+      MONGO_URI: mongodb://mongo:27017/gamestoredb
+      JWT_SECRET: my_secret_jwt_key
 
     depends_on:
       - mongo
 
+  client:
+    image: terrynguyen1403/tmdt-gamestore-client:v1.0.0
+
+    restart: unless-stopped
+
+    ports:
+      - "5173:80"
+
+    depends_on:
+      - server
+
 volumes:
   mongo-data:
+
