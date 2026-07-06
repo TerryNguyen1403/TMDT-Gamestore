@@ -89,29 +89,57 @@ TMDT-Gamestore/
 ---
 
 ## 🚀 Getting Started
-
 ### Prerequisites
-- [Node.js](https://nodejs.org/) 18+ and npm
-- [MongoDB](https://www.mongodb.com/) (local instance or Docker)
-- A [VNPay sandbox](https://sandbox.vnpayment.vn/) account (for payments) — a demo config is already included
+To run the project with Docker, make sure the following software is installed:
+- Docker
+- Docker Compose (included with Docker Desktop or Docker Engine v20.10+)
+> Note: Node.js, npm, and MongoDB are not required when using Docker Compose.
 
-### Option 1 — Run with Docker (recommended)
+### Option 1 — Run with Docker Compose (Recommended)
 
-The fastest way to get everything running:
+Clone the repository:
 
 ```bash
 git clone https://github.com/TerryNguyen1403/TMDT-Gamestore.git
 cd TMDT-Gamestore
-docker compose up -d --build
 ```
 
-This starts MongoDB and the backend. To (optionally) load sample data:
+Start all services:
 
 ```bash
-docker compose run --rm \
-  -e MONGO_URI=mongodb://mongo:27017/gamestoredb \
-  -v "$PWD/server/seed.js:/app/seed.js" \
-  server node seed.js
+docker compose up -d
+```
+
+Docker Compose will automatically:
+- Pull the latest client and server images from Docker Hub
+- Start a MongoDB container
+- Create the required Docker volume
+- Seed the database with demo data (only on the first startup)
+- Launch the backend API and frontend application
+
+Access the application
+
+After all containers are running:
+
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:3000
+
+The demo database includes:
+
+- 🎮 20 sample games
+- 👤 2 demo user accounts
+- 👑 1 administrator account
+
+To stop the application:
+
+```bash
+docker compose down
+```
+
+To remove all containers and reset the database:
+
+```bash
+docker compose down -v
 ```
 
 ### Option 2 — Run locally (dev mode)
