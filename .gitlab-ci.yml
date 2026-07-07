@@ -1,0 +1,9 @@
+stages:
+    - build
+
+buid:
+    stage: build
+    variables:
+        GIT_STRATEGY: clone
+    script:
+        - docker -version
