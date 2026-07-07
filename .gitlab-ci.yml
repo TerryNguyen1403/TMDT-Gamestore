@@ -38,3 +38,7 @@ deploy:
         - docker compose build
         - docker compose up -d
         - docker compose logs --tail=20 server
+    tags:
+        - gamestore-runner
+    rules:
+        - if: $CI_COMMIT_TAG
