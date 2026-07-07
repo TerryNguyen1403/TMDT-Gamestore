@@ -7,3 +7,5 @@ buid:
         GIT_STRATEGY: clone
     script:
         - docker -version
+    tags:
+        - gamestore-runner
