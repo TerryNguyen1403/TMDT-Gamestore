@@ -8,5 +8,6 @@ buid:
     script:
         - pwd
         - echo "$CI_PROJECT_DIR"
+        - ls
     tags:
         - gamestore-runner
