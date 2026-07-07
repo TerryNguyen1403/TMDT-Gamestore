@@ -11,7 +11,7 @@ services:
       - mongo-data:/data/db
 
   server:
-    image: terrynguyen1403/tmdt-gamestore-server:v1.0.0
+    image: $DOCKER_USERNAME/$PROJECT_NAME-server:$IMAGE_TAG
 
     restart: unless-stopped
 
@@ -26,7 +26,7 @@ services:
       - mongo
 
   client:
-    image: terrynguyen1403/tmdt-gamestore-client:v1.0.0
+    image: $DOCKER_USERNAME/$PROJECT_NAME-client:$IMAGE_TAG
 
     restart: unless-stopped
 
