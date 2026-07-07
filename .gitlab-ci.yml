@@ -1,7 +1,3 @@
-variables:
-    userName: terrynguyen1403
-    projectName: gamestore
-
 stages:
     - build
     - push
@@ -12,10 +8,10 @@ build:
     variables:
         GIT_STRATEGY: clone
     script:
-        - docker build -t $userName/$projectName-server:$CI_COMMIT_TAG -f server/Dockerfile server
-        - docker build -t $userName/$projectName-client:$CI_COMMIT_TAG -f client/Dockerfile client
+        - docker build -t $DOCKER_USERNAME/$PROJECT_NAME-server:$CI_COMMIT_TAG -f server/Dockerfile server
+        - docker build -t $DOCKER_USERNAME/$PROJECT_NAME-client:$CI_COMMIT_TAG -f client/Dockerfile client
         - docker images
     tags:
         - gamestore-runner
-    only:
-        - tags
+    rules:
+        - if: $CI_COMMIT_TAG
