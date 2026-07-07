@@ -27,3 +27,14 @@ push:
         - gamestore-runner
     rules:
         - if: $CI_COMMIT_TAG
+
+deploy:
+    stage: deploy
+    variables:
+        GIT_STRATEGY: clone
+        IMAGE_TAG: $CI_COMMIT_TAG
+    script:
+        - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+        - docker compose build
+        - docker compose up -d
+        - docker compose logs --tail=20 server
