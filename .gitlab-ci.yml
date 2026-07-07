@@ -1,15 +1,14 @@
 stages:
     - build
 
-buid:
+build:
     stage: build
     variables:
         GIT_STRATEGY: clone
     script:
+        - docker images
         - docker build -t server:$CI_COMMIT_TAG -f server/Dockerfile server
         - docker build -t client:$CI_COMMIT_TAG -f client/Dockerfile client
-        - docker ps -a
-        - docker logs server
-        - docker logs client
+        - docker images
     tags:
         - gamestore-runner
