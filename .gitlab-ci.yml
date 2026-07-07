@@ -6,8 +6,10 @@ buid:
     variables:
         GIT_STRATEGY: clone
     script:
-        - pwd
-        - echo "$CI_PROJECT_DIR"
-        - ls
+        - docker build -t server:$CI_COMMIT_TAG -f server/Dockerfile
+        - docker build -t client:$CI_COMMIT_TAG -f client/Dockerfile
+        - docker ps -a
+        - docker logs server
+        - docker logs client
     tags:
         - gamestore-runner
