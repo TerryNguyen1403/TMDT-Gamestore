@@ -12,3 +12,5 @@ build:
         - docker images
     tags:
         - gamestore-runner
+    only:
+        - tags
