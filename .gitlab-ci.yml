@@ -7,5 +7,6 @@ buid:
         GIT_STRATEGY: clone
     script:
         - pwd
+        - echo "$CI_PROJECT_DIR"
     tags:
         - gamestore-runner
