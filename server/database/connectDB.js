@@ -3,7 +3,7 @@ import "dotenv/config";
 
 const connectDB = async () => {
   try {
-    const mongoURI = process.env.MONGO_URI;
+    const mongoURI = process.env.MONGO_URI || "mongodb://mongo:27017/gamestoredb";
     await mongoose.connect(mongoURI);
     console.log("✅ Connected to MongoDB successfully");
   } catch (error) {
